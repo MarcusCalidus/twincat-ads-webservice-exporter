@@ -22,7 +22,7 @@ app.get('/valuesJson', (req, res) => {
 app.get('/values', (req, res) => {
     res.setHeader('Content-Type', 'text/plain;charset=utf-8');
 
- /*   adsBackend.getValues()
+   adsBackend.getValues()
         .subscribe(
             data => {
                 const result: string[] = [];
@@ -31,7 +31,7 @@ app.get('/values', (req, res) => {
                         result.push(`# HELP ${metric[0].metric.name} ${metric[0].metric.help}`);
                         result.push(`# TYPE ${metric[0].metric.name} ${metric[0].metric.metricType}`);
                         metric.forEach(
-                            line => result.push(`${line.metric.name}${line.label?'{'+line.label.join(',')+'}':''} ${line.value}`)
+                            line => result.push(`${line.metric.name}${(line.label||[]).length > 0  ?'{'+line.label.join(',')+'}':''} ${line.value}`)
                         );
                     }
                 );
@@ -41,7 +41,7 @@ app.get('/values', (req, res) => {
                 res.statusCode = 500;
                 res.end(error)
             }
-        );*/
+        );
 });
 
 // start the Express server

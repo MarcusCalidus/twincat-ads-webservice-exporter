@@ -313,13 +313,22 @@ export class TcAdsWebserviceBackend {
                 if (hasOwnProperty(metric, 'symbol')) {
                     requestSymbols[(metric as ADSSingleMetric).symbol] = metric.datatype;
                     symbolMetrics[(metric as ADSSingleMetric).symbol] = metric;
-                    symbolLabels[(metric as ADSSingleMetric).symbol] = [target.label];
+                    symbolLabels[(metric as ADSSingleMetric).symbol] = [];
+                    if (target.label) {
+                        symbolLabels[(metric as ADSSingleMetric).symbol].push(target.label)
+                    }
                 } else if (hasOwnProperty(metric, 'multiple')) {
                     (metric as ADSMultipleMetric).multiple.forEach(
                         mmetric => {
                             requestSymbols[mmetric.symbol] = metric.datatype;
                             symbolMetrics[mmetric.symbol] = metric;
-                            symbolLabels[mmetric.symbol] = [mmetric.label, target.label];
+                            symbolLabels[mmetric.symbol] = [];
+                            if (mmetric.label) {
+                                symbolLabels[mmetric.symbol].push(mmetric.label)
+                            }
+                            if (target.label) {
+                                symbolLabels[mmetric.symbol].push(target.label)
+                            }
                         }
                     );
                 }

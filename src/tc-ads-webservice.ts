@@ -29,10 +29,6 @@ export namespace TcAdsWebService {
             this.error = error;
             this.reader = reader;
         }
-
-        getTypeString() {
-            return 'TcAdsWebService.Response';
-        };
     }
 
     export class InternalError {
@@ -43,10 +39,6 @@ export namespace TcAdsWebService {
             this.errorMessage = errorMessage;
             this.errorCode = errorCode;
         }
-
-        getTypeString() {
-            return 'TcAdsWebService.Error';
-        };
     }
 
     export class ResquestError {
@@ -56,10 +48,6 @@ export namespace TcAdsWebService {
         constructor(requestStatus: number, requestStatusText: string) {
             this.requestStatus = requestStatus;
             this.requestStatusText = requestStatusText;
-        }
-
-        getTypeString() {
-            return 'TcAdsWebService.ResquestError';
         }
     }
 
@@ -72,10 +60,6 @@ export namespace TcAdsWebService {
             this.sServiceUrl = sServiceUrl;
             this.sServiceUser = sServiceUser;
             this.sServicePassword = sServicePassword;
-        }
-
-        getTypeString() {
-            return 'TcAdsWebService.Client';
         }
 
         readwrite(sNetId: string,
@@ -339,10 +323,6 @@ export namespace TcAdsWebService {
             this.decodedData = Base64.decode(data);
         }
 
-        getTypeString() {
-            return 'TcAdsWebService.DataReader';
-        };
-
         readSINT() {
             const res = convertDataToInt(this.decodedData.substr(this.offset, 1), 1);
             this.offset = this.offset + 1;
@@ -456,10 +436,6 @@ export namespace TcAdsWebService {
         }
 
         byteArray: any[] = [];
-
-        getTypeString() {
-            return 'TcAdsWebService.DataWriter';
-        }
 
         writeSINT(value: number) {
             this.byteArray = this.PrepareData(value, TcAdsWebServiceDataTypes.Integer, 1, this.byteArray);
