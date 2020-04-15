@@ -1,7 +1,7 @@
 import express from 'express';
 import {TcAdsWebserviceBackend} from './tc-ads-webservice-backend';
 
-const serverPort = 9713;
+const serverPort = 9715;
 const app = express();
 const adsBackend = new TcAdsWebserviceBackend();
 

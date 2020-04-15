@@ -42,9 +42,9 @@ npx path/to/twincat-ads-webservice-exporter
 The exporter provides the values as follows
 
 ```
-http://{YourExporterServer}:9713/values
+http://{YourExporterServer}:9715/values
 
-e.g. http://localhost:9713/values
+e.g. http://localhost:9715/values
 
-Raw JSON Data like so: http://{YourExporterServer}:9713/valuesJson
+Raw JSON Data like so: http://{YourExporterServer}:9715/valuesJson
 ```

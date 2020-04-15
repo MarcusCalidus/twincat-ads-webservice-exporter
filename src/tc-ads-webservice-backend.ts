@@ -4,7 +4,7 @@ import {merge, Observable} from 'rxjs';
 import {TcAdsWebService} from './tc-ads-webservice';
 import {groupBy, mergeMap, toArray} from 'rxjs/internal/operators';
 import {flatMap} from 'rxjs/operators';
-import {hasOwnProperty} from "tslint/lib/utils";
+import {hasOwnProperty} from 'tslint/lib/utils';
 import TcAdsReservedIndexGroups = TcAdsWebService.TcAdsReservedIndexGroups;
 
 type ADSDatatype = 'int' | 'byte' | 'sint' | 'dint' | 'word' | 'dword' | 'bool' | 'real' | 'lreal';
@@ -335,7 +335,7 @@ export class TcAdsWebserviceBackend {
                             ([symbol, value]) => result.push({
                                 metric: symbolMetrics[symbol],
                                 label: symbolLabels[symbol],
-                                value: value
+                                value
                             })
                         );
                         return result;
