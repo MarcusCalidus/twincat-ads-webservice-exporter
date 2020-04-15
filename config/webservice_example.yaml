@@ -1,0 +1,100 @@
+url: http://bs-24-klamonitoring1.birkenstock.com/TcAdsWebService/TcAdsWebService.dll
+targets:
+  - netId: 192.168.20.200.1.1
+    port: 801
+    label: netId="192.168.20.200.1.1"
+    metrics:
+      - name: tank_fill_level
+        datatype: int
+        metricType: gauge
+        help: Fill level of tank (0..32767)
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].intCaptron
+            label: tank="1"
+          - symbol: MAIN.a_fb_Turm[2].intCaptron
+            label: tank="2"
+      - name: tank_ready_status
+        datatype: byte
+        metricType: gauge
+        help: Tank ready status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].TankBereit
+            label: tank="1"
+          - symbol: MAIN.a_fb_Turm[2].TankBereit
+            label: tank="2"
+      - name: tank_zlb_drive_empty_status
+        datatype: byte
+        metricType: gauge
+        help: ZLB Drive Empty status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].ZLBDriveEmpty
+            label: tank="1"
+          - symbol: MAIN.a_fb_Turm[2].ZLBDriveEmpty
+            label: tank="2"
+      - name: tank_active_status
+        datatype: byte
+        metricType: gauge
+        help: Tank active status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].Aktiv
+            label: tank="1"
+          - symbol: MAIN.a_fb_Turm[2].Aktiv
+            label: tank="2"
+      - name: tank_status_status
+        datatype: int
+        metricType: gauge
+        help: Tank status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].Status
+            label: tank="1"
+          - symbol: MAIN.a_fb_Turm[2].Status
+            label: tank="2"
+  - netId: 192.168.20.201.1.1
+    port: 801
+    label: netId="192.168.20.201.1.1"
+    metrics:
+      - name: tank_fill_level
+        datatype: int
+        metricType: gauge
+        help: Fill level of tank (0..32767)
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].intCaptron
+            label: tank="3"
+          - symbol: MAIN.a_fb_Turm[2].intCaptron
+            label: tank="4"
+      - name: tank_ready_status
+        datatype: byte
+        metricType: gauge
+        help: Tank ready status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].TankBereit
+            label: tank="3"
+          - symbol: MAIN.a_fb_Turm[2].TankBereit
+            label: tank="4"
+      - name: tank_zlb_drive_empty_status
+        datatype: byte
+        metricType: gauge
+        help: ZLB Drive Empty status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].ZLBDriveEmpty
+            label: tank="3"
+          - symbol: MAIN.a_fb_Turm[2].ZLBDriveEmpty
+            label: tank="4"
+      - name: tank_active_status
+        datatype: byte
+        metricType: gauge
+        help: Tank active status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].Aktiv
+            label: tank="3"
+          - symbol: MAIN.a_fb_Turm[2].Aktiv
+            label: tank="4"
+      - name: tank_status_status
+        datatype: int
+        metricType: gauge
+        help: Tank status
+        multiple:
+          - symbol: MAIN.a_fb_Turm[1].Status
+            label: tank="3"
+          - symbol: MAIN.a_fb_Turm[2].Status
+            label: tank="4"
