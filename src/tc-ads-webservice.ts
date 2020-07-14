@@ -32,8 +32,8 @@ export namespace TcAdsWebService {
     }
 
     export class InternalError {
-        private errorMessage: string;
-        private errorCode: number;
+        public errorMessage: string;
+        public errorCode: number;
 
         constructor(errorMessage: string, errorCode: number) {
             this.errorMessage = errorMessage;

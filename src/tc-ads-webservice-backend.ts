@@ -1,11 +1,12 @@
 import * as Yaml from 'yamljs';
 import * as path from 'path';
-import {merge, Observable} from 'rxjs';
+import {EMPTY, merge, Observable} from 'rxjs';
 import {TcAdsWebService} from './tc-ads-webservice';
-import {groupBy, mergeMap, toArray} from 'rxjs/internal/operators';
+import {catchError, groupBy, mergeMap, toArray} from 'rxjs/internal/operators';
 import {flatMap} from 'rxjs/operators';
 import {hasOwnProperty} from 'tslint/lib/utils';
 import TcAdsReservedIndexGroups = TcAdsWebService.TcAdsReservedIndexGroups;
+import InternalError = TcAdsWebService.InternalError;
 
 type ADSDatatype = 'int' | 'byte' | 'sint' | 'dint' | 'word' | 'dword' | 'bool' | 'real' | 'lreal';
 
@@ -350,6 +351,14 @@ export class TcAdsWebserviceBackend {
                         return result;
                     }
                 ),
+                catchError((error) => {
+                    if (error instanceof InternalError) {
+                        console.error('InternalError', target.netId, target.port, error.errorMessage, error.errorCode);
+                    } else {
+                        console.error('Generic Error: ', JSON.stringify(error));
+                    }
+                    return EMPTY;
+                })
             );
     }
 }
