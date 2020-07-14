@@ -1,6 +1,6 @@
 import express from 'express';
 import {TcAdsWebserviceBackend} from './tc-ads-webservice-backend';
-import {TcAdsWebService} from "./tc-ads-webservice";
+import {TcAdsWebService} from './tc-ads-webservice';
 import InternalError = TcAdsWebService.InternalError;
 
 const serverPort = 9715;
