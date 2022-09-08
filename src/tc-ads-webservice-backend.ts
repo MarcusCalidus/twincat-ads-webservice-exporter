@@ -1,9 +1,7 @@
 import * as Yaml from 'yamljs';
 import * as path from 'path';
-import {EMPTY, merge, Observable} from 'rxjs';
+import {catchError, EMPTY, flatMap, groupBy, merge, mergeMap, Observable, toArray} from 'rxjs';
 import {TcAdsWebService} from './tc-ads-webservice';
-import {catchError, groupBy, mergeMap, toArray} from 'rxjs/internal/operators';
-import {flatMap} from 'rxjs/operators';
 import {hasOwnProperty} from 'tslint/lib/utils';
 import TcAdsReservedIndexGroups = TcAdsWebService.TcAdsReservedIndexGroups;
 import InternalError = TcAdsWebService.InternalError;
@@ -251,7 +249,7 @@ export class TcAdsWebserviceBackend {
         return merge(...observables)
             .pipe(
                 groupBy((value: ResultValue) => value.metric.name),
-                mergeMap(group => group.pipe(toArray())),
+                mergeMap((group: any) => group.pipe(toArray())),
                 toArray()
             );
     }
@@ -339,7 +337,7 @@ export class TcAdsWebserviceBackend {
         return this.getSymbolValues(target.netId, target.port, requestSymbols)
             .pipe(
                 flatMap(
-                    obj => {
+                    (obj: any) => {
                         const result: any[] = [];
                         Object.entries(obj).forEach(
                             ([symbol, value]) => result.push({
@@ -351,7 +349,7 @@ export class TcAdsWebserviceBackend {
                         return result;
                     }
                 ),
-                catchError((error) => {
+                catchError((error: any) => {
                     if (error instanceof InternalError) {
                         console.error('InternalError', target.netId, target.port, error.errorMessage, error.errorCode);
                     } else {

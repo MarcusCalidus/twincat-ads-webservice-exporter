@@ -8,7 +8,7 @@ const tc_ads_webservice_backend_1 = require("./tc-ads-webservice-backend");
 const tc_ads_webservice_1 = require("./tc-ads-webservice");
 var InternalError = tc_ads_webservice_1.TcAdsWebService.InternalError;
 const serverPort = 9715;
-const app = express_1.default();
+const app = (0, express_1.default)();
 const adsBackend = new tc_ads_webservice_backend_1.TcAdsWebserviceBackend();
 app.get('/valuesJson', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
@@ -23,12 +23,12 @@ app.get('/valuesJson', (req, res) => {
 app.get('/values', (req, res) => {
     res.setHeader('Content-Type', 'text/plain;charset=utf-8');
     adsBackend.getValues()
-        .subscribe(data => {
+        .subscribe((data) => {
         const result = [];
-        data.forEach(metric => {
+        data.forEach((metric) => {
             result.push(`# HELP ${metric[0].metric.name} ${metric[0].metric.help}`);
             result.push(`# TYPE ${metric[0].metric.name} ${metric[0].metric.metricType}`);
-            metric.forEach(line => result.push(`${line.metric.name}${(line.label || []).length > 0 ? '{' + line.label.join(',') + '}' : ''} ${line.value}`));
+            metric.forEach((line) => result.push(`${line.metric.name}${(line.label || []).length > 0 ? '{' + line.label.join(',') + '}' : ''} ${line.value}`));
         });
         res.end(result.join('\n') + '\n');
     }, error => {

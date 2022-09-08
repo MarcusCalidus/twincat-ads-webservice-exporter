@@ -1,18 +1,33 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TcAdsWebserviceBackend = void 0;
 const Yaml = __importStar(require("yamljs"));
 const path = __importStar(require("path"));
 const rxjs_1 = require("rxjs");
 const tc_ads_webservice_1 = require("./tc-ads-webservice");
-const operators_1 = require("rxjs/internal/operators");
-const operators_2 = require("rxjs/operators");
 const utils_1 = require("tslint/lib/utils");
 var TcAdsReservedIndexGroups = tc_ads_webservice_1.TcAdsWebService.TcAdsReservedIndexGroups;
 var InternalError = tc_ads_webservice_1.TcAdsWebService.InternalError;
@@ -27,7 +42,7 @@ class TcAdsWebserviceBackend {
     }
     getSymbolValues(sNetId, nPort, aSymbols) {
         return this.getSymbolHandles(sNetId, nPort, aSymbols)
-            .pipe(operators_2.flatMap((symbolHandles) => {
+            .pipe((0, rxjs_1.flatMap)((symbolHandles) => {
             const readSymbolValuesWriter = new tc_ads_webservice_1.TcAdsWebService.DataWriter();
             let requestSize = 0;
             Object.entries(symbolHandles).forEach(([symbol, handle]) => {
@@ -119,8 +134,8 @@ class TcAdsWebserviceBackend {
     getValues() {
         const observables = [];
         this.config.targets.forEach(target => observables.push(this.handleTarget(target)));
-        return rxjs_1.merge(...observables)
-            .pipe(operators_1.groupBy((value) => value.metric.name), operators_1.mergeMap(group => group.pipe(operators_1.toArray())), operators_1.toArray());
+        return (0, rxjs_1.merge)(...observables)
+            .pipe((0, rxjs_1.groupBy)((value) => value.metric.name), (0, rxjs_1.mergeMap)((group) => group.pipe((0, rxjs_1.toArray)())), (0, rxjs_1.toArray)());
     }
     static getSizeOfType(type) {
         switch (type) {
@@ -173,7 +188,7 @@ class TcAdsWebserviceBackend {
         const symbolMetrics = {};
         const symbolLabels = {};
         target.metrics.forEach((metric) => {
-            if (utils_1.hasOwnProperty(metric, 'symbol')) {
+            if ((0, utils_1.hasOwnProperty)(metric, 'symbol')) {
                 requestSymbols[metric.symbol] = metric.datatype;
                 symbolMetrics[metric.symbol] = metric;
                 symbolLabels[metric.symbol] = [];
@@ -181,7 +196,7 @@ class TcAdsWebserviceBackend {
                     symbolLabels[metric.symbol].push(target.label);
                 }
             }
-            else if (utils_1.hasOwnProperty(metric, 'multiple')) {
+            else if ((0, utils_1.hasOwnProperty)(metric, 'multiple')) {
                 metric.multiple.forEach(mmetric => {
                     requestSymbols[mmetric.symbol] = metric.datatype;
                     symbolMetrics[mmetric.symbol] = metric;
@@ -196,7 +211,7 @@ class TcAdsWebserviceBackend {
             }
         });
         return this.getSymbolValues(target.netId, target.port, requestSymbols)
-            .pipe(operators_2.flatMap(obj => {
+            .pipe((0, rxjs_1.flatMap)((obj) => {
             const result = [];
             Object.entries(obj).forEach(([symbol, value]) => result.push({
                 metric: symbolMetrics[symbol],
@@ -204,7 +219,7 @@ class TcAdsWebserviceBackend {
                 value
             }));
             return result;
-        }), operators_1.catchError((error) => {
+        }), (0, rxjs_1.catchError)((error) => {
             if (error instanceof InternalError) {
                 console.error('InternalError', target.netId, target.port, error.errorMessage, error.errorCode);
             }
