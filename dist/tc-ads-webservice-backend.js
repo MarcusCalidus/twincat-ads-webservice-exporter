@@ -15,29 +15,47 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TcAdsWebserviceBackend = void 0;
 const Yaml = __importStar(require("yamljs"));
 const path = __importStar(require("path"));
 const rxjs_1 = require("rxjs");
 const tc_ads_webservice_1 = require("./tc-ads-webservice");
-const utils_1 = require("tslint/lib/utils");
 var TcAdsReservedIndexGroups = tc_ads_webservice_1.TcAdsWebService.TcAdsReservedIndexGroups;
 var InternalError = tc_ads_webservice_1.TcAdsWebService.InternalError;
+/** Replaces tslint/lib/utils' hasOwnProperty, which is no longer a dependency. */
+function hasOwnProperty(obj, name) {
+    return Object.prototype.hasOwnProperty.call(obj, name);
+}
 class TcAdsWebserviceBackend {
-    constructor() {
+    constructor(config) {
         this.symbolHandles = {};
-        const configFile = path.join(__dirname, '../config/webservice.yaml');
-        console.log('loading config from ', configFile);
-        this.config = Yaml.load(configFile);
-        console.log('config loaded with ', this.config.targets.length, ' targets');
+        if (config) {
+            this.config = config;
+        }
+        else {
+            const configFile = path.join(__dirname, '../config/webservice.yaml');
+            console.log('loading config from ', configFile);
+            this.config = Yaml.load(configFile);
+            console.log('config loaded with ', this.config.targets.length, ' targets');
+        }
         this.client = new tc_ads_webservice_1.TcAdsWebService.Client(this.config.url, this.config.username, this.config.password);
     }
     getSymbolValues(sNetId, nPort, aSymbols) {
@@ -188,7 +206,7 @@ class TcAdsWebserviceBackend {
         const symbolMetrics = {};
         const symbolLabels = {};
         target.metrics.forEach((metric) => {
-            if ((0, utils_1.hasOwnProperty)(metric, 'symbol')) {
+            if (hasOwnProperty(metric, 'symbol')) {
                 requestSymbols[metric.symbol] = metric.datatype;
                 symbolMetrics[metric.symbol] = metric;
                 symbolLabels[metric.symbol] = [];
@@ -196,7 +214,7 @@ class TcAdsWebserviceBackend {
                     symbolLabels[metric.symbol].push(target.label);
                 }
             }
-            else if ((0, utils_1.hasOwnProperty)(metric, 'multiple')) {
+            else if (hasOwnProperty(metric, 'multiple')) {
                 metric.multiple.forEach(mmetric => {
                     requestSymbols[mmetric.symbol] = metric.datatype;
                     symbolMetrics[mmetric.symbol] = metric;

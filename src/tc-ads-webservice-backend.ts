@@ -2,9 +2,13 @@ import * as Yaml from 'yamljs';
 import * as path from 'path';
 import {catchError, EMPTY, flatMap, groupBy, merge, mergeMap, Observable, toArray} from 'rxjs';
 import {TcAdsWebService} from './tc-ads-webservice';
-import {hasOwnProperty} from 'tslint/lib/utils';
 import TcAdsReservedIndexGroups = TcAdsWebService.TcAdsReservedIndexGroups;
 import InternalError = TcAdsWebService.InternalError;
+
+/** Replaces tslint/lib/utils' hasOwnProperty, which is no longer a dependency. */
+function hasOwnProperty(obj: object, name: string): boolean {
+    return Object.prototype.hasOwnProperty.call(obj, name);
+}
 
 type ADSDatatype = 'int' | 'byte' | 'sint' | 'dint' | 'word' | 'dword' | 'bool' | 'real' | 'lreal';
 
@@ -81,11 +85,15 @@ export class TcAdsWebserviceBackend {
 
     private readTimeout: 10000;
 
-    constructor() {
-        const configFile = path.join(__dirname, '../config/webservice.yaml');
-        console.log('loading config from ', configFile);
-        this.config = Yaml.load(configFile);
-        console.log('config loaded with ', this.config.targets.length, ' targets');
+    constructor(config?: WebserviceConfig) {
+        if (config) {
+            this.config = config;
+        } else {
+            const configFile = path.join(__dirname, '../config/webservice.yaml');
+            console.log('loading config from ', configFile);
+            this.config = Yaml.load(configFile);
+            console.log('config loaded with ', this.config.targets.length, ' targets');
+        }
 
         this.client = new TcAdsWebService.Client(
             this.config.url,

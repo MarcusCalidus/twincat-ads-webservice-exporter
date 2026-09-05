@@ -4,7 +4,7 @@ import {TcAdsWebService} from './tc-ads-webservice';
 import InternalError = TcAdsWebService.InternalError;
 
 const serverPort = 9715;
-const app = express();
+export const app = express();
 const adsBackend = new TcAdsWebserviceBackend();
 
 app.get('/valuesJson', (req, res) => {
@@ -50,7 +50,9 @@ app.get('/values', (req, res) => {
         );
 });
 
-// start the Express server
-app.listen(serverPort, () => {
-    console.log(`server started at http://localhost:${serverPort}`);
-});
+// start the Express server, unless this module was imported (e.g. by tests) rather than run directly
+if (require.main === module) {
+    app.listen(serverPort, () => {
+        console.log(`server started at http://localhost:${serverPort}`);
+    });
+}
