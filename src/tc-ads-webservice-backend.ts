@@ -81,11 +81,15 @@ export class TcAdsWebserviceBackend {
 
     private readTimeout: 10000;
 
-    constructor() {
-        const configFile = path.join(__dirname, '../config/webservice.yaml');
-        console.log('loading config from ', configFile);
-        this.config = Yaml.load(configFile);
-        console.log('config loaded with ', this.config.targets.length, ' targets');
+    constructor(config?: WebserviceConfig) {
+        if (config) {
+            this.config = config;
+        } else {
+            const configFile = path.join(__dirname, '../config/webservice.yaml');
+            console.log('loading config from ', configFile);
+            this.config = Yaml.load(configFile);
+            console.log('config loaded with ', this.config.targets.length, ' targets');
+        }
 
         this.client = new TcAdsWebService.Client(
             this.config.url,
