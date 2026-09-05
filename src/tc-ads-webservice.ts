@@ -12,7 +12,7 @@ https://github.com/MarcusCalidus
 */
 
 import axios, {AxiosBasicCredentials, AxiosError, AxiosResponse} from 'axios';
-import {DOMParser} from 'xmldom';
+import {DOMParser} from '@xmldom/xmldom';
 
 export namespace TcAdsWebService {
     type PCallback = (resp: Response, userState: any) => void
@@ -196,7 +196,7 @@ export namespace TcAdsWebService {
                 try {
                     resp = new TcAdsWebService.Response(
                         true, new TcAdsWebService.ResquestError(response.status, response.statusText), undefined);
-                } catch (err) {
+                } catch {
                     // Internet Explorer throws exception on abort
                     resp = new TcAdsWebService.Response(
                         true, new TcAdsWebService.ResquestError(0, '0'), undefined);
@@ -206,7 +206,12 @@ export namespace TcAdsWebService {
                 return resp;
             }
 
-            const sSoapResponse = new DOMParser().parseFromString(response.data, response.headers['content-type'] || 'text/xml');
+            // axios types a header value as string | number | boolean | string[], and
+            // @xmldom/xmldom only accepts a bare XML MIME type - so strip any charset
+            // suffix and fall back to text/xml for anything unrecognised.
+            const contentType = String(response.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+            const mimeType = contentType === 'application/xml' ? 'application/xml' : 'text/xml';
+            const sSoapResponse = new DOMParser().parseFromString(response.data, mimeType);
             const faultstringNodes = sSoapResponse.getElementsByTagName('faultstring');
 
             if (faultstringNodes.length !== 0) {

@@ -3,14 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const tc_ads_webservice_backend_1 = require("./tc-ads-webservice-backend");
 const tc_ads_webservice_1 = require("./tc-ads-webservice");
 var InternalError = tc_ads_webservice_1.TcAdsWebService.InternalError;
 const serverPort = 9715;
-const app = (0, express_1.default)();
+exports.app = (0, express_1.default)();
 const adsBackend = new tc_ads_webservice_backend_1.TcAdsWebserviceBackend();
-app.get('/valuesJson', (req, res) => {
+exports.app.get('/valuesJson', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     adsBackend.getValues()
         .subscribe(data => {
@@ -20,7 +21,7 @@ app.get('/valuesJson', (req, res) => {
         res.end(JSON.stringify({ success: false, error }));
     });
 });
-app.get('/values', (req, res) => {
+exports.app.get('/values', (req, res) => {
     res.setHeader('Content-Type', 'text/plain;charset=utf-8');
     adsBackend.getValues()
         .subscribe((data) => {
@@ -41,8 +42,10 @@ app.get('/values', (req, res) => {
         }
     });
 });
-// start the Express server
-app.listen(serverPort, () => {
-    console.log(`server started at http://localhost:${serverPort}`);
-});
+// start the Express server, unless this module was imported (e.g. by tests) rather than run directly
+if (require.main === module) {
+    exports.app.listen(serverPort, () => {
+        console.log(`server started at http://localhost:${serverPort}`);
+    });
+}
 //# sourceMappingURL=index.js.map

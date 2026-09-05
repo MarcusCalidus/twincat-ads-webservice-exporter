@@ -40,7 +40,6 @@ const config = (): WebserviceConfig => ({
  */
 const stubClient = (values: number[], opts: { failWith?: any } = {}) => {
     const symbolCount = values.length;
-    let call = 0;
 
     return {
         calls: [] as any[][],
@@ -69,7 +68,6 @@ const stubClient = (values: number[], opts: { failWith?: any } = {}) => {
                 values.forEach(v => writer.writeINT(v));
             }
 
-            call++;
             callback(new TcAdsWebService.Response(false, undefined, new DataReader(writer.getBase64EncodedData())));
         }
     };

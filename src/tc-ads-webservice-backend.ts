@@ -2,9 +2,13 @@ import * as Yaml from 'yamljs';
 import * as path from 'path';
 import {catchError, EMPTY, flatMap, groupBy, merge, mergeMap, Observable, toArray} from 'rxjs';
 import {TcAdsWebService} from './tc-ads-webservice';
-import {hasOwnProperty} from 'tslint/lib/utils';
 import TcAdsReservedIndexGroups = TcAdsWebService.TcAdsReservedIndexGroups;
 import InternalError = TcAdsWebService.InternalError;
+
+/** Replaces tslint/lib/utils' hasOwnProperty, which is no longer a dependency. */
+function hasOwnProperty(obj: object, name: string): boolean {
+    return Object.prototype.hasOwnProperty.call(obj, name);
+}
 
 type ADSDatatype = 'int' | 'byte' | 'sint' | 'dint' | 'word' | 'dword' | 'bool' | 'real' | 'lreal';
 

@@ -8,7 +8,8 @@ import InternalError = TcAdsWebService.InternalError;
 
 const soapEnvelope = (body: string) =>
     '<?xml version="1.0" encoding="utf-8"?>' +
-    '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">' +
+    '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" ' +
+    'xmlns:q1="http://beckhoff.org/message/">' +
     '<SOAP-ENV:Body>' + body + '</SOAP-ENV:Body></SOAP-ENV:Envelope>';
 
 const axiosResponse = (data: string, status = 200): any => ({

@@ -17,7 +17,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TcAdsWebService = void 0;
 const axios_1 = __importDefault(require("axios"));
-const xmldom_1 = require("xmldom");
+const xmldom_1 = require("@xmldom/xmldom");
 var TcAdsWebService;
 (function (TcAdsWebService) {
     class Response {
@@ -136,14 +136,19 @@ var TcAdsWebService;
                 try {
                     resp = new TcAdsWebService.Response(true, new TcAdsWebService.ResquestError(response.status, response.statusText), undefined);
                 }
-                catch (err) {
+                catch (_a) {
                     // Internet Explorer throws exception on abort
                     resp = new TcAdsWebService.Response(true, new TcAdsWebService.ResquestError(0, '0'), undefined);
                 }
                 response = null;
                 return resp;
             }
-            const sSoapResponse = new xmldom_1.DOMParser().parseFromString(response.data, response.headers['content-type'] || 'text/xml');
+            // axios types a header value as string | number | boolean | string[], and
+            // @xmldom/xmldom only accepts a bare XML MIME type - so strip any charset
+            // suffix and fall back to text/xml for anything unrecognised.
+            const contentType = String(response.headers['content-type'] || '').split(';')[0].trim().toLowerCase();
+            const mimeType = contentType === 'application/xml' ? 'application/xml' : 'text/xml';
+            const sSoapResponse = new xmldom_1.DOMParser().parseFromString(response.data, mimeType);
             const faultstringNodes = sSoapResponse.getElementsByTagName('faultstring');
             if (faultstringNodes.length !== 0) {
                 errorMessage = faultstringNodes[0].firstChild.nodeValue;
@@ -724,5 +729,5 @@ var TcAdsWebService;
         }
         return res;
     }
-})(TcAdsWebService = exports.TcAdsWebService || (exports.TcAdsWebService = {}));
+})(TcAdsWebService || (exports.TcAdsWebService = TcAdsWebService = {}));
 //# sourceMappingURL=tc-ads-webservice.js.map

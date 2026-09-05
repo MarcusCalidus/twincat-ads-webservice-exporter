@@ -6,11 +6,11 @@ jest.mock('../src/tc-ads-webservice-backend', () => ({
     TcAdsWebserviceBackend: jest.fn().mockImplementation(() => ({getValues}))
 }));
 
-// imported after the mock so the backend constructed at module load is the stub
-// tslint:disable-next-line
-const {app} = require('../src/index');
 import {of, throwError} from 'rxjs';
 import {TcAdsWebService} from '../src/tc-ads-webservice';
+// jest hoists the mock above the imports, so the backend constructed when
+// ../src/index is first loaded is already the stub
+import {app} from '../src/index';
 
 const sampleGroups = [
     [
